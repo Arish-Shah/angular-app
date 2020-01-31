@@ -1,23 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="../node_modules/angular/angular.min.js"></script>
-    <script src="./app/app.js"></script>
-    <link rel="stylesheet" href="main.css" />
-    <title>Angular App</title>
+    <script src="./libs.ts"></script>
+    <title>Document</title>
   </head>
   <body>
-    <div ng-controller="AppController">
-      <h1>{{ message }}</h1>
-      <input type="text" ng-model="search" />
-      <ul>
-        <li ng-repeat="person in people | orderBy: 'name' | filter: search">
-          {{ person.name }}
-        </li>
-      </ul>
-    </div>
+    <app-root></app-root>
+    <script src="./main.ts"></script>
   </body>
 </html>
