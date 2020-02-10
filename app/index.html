@@ -3,13 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./lib/angular.min.js"></script>
-    <script src="./app/app.module.js"></script>
+    <script src="./app.module.js"></script>
+    <script src="./app-root/app-root.component.js"></script>
     <title>Angular App</title>
   </head>
   <body>
-    <div ng-controller="mainController">
-      Hello, {{ greeting.title }}!
-    </div>
+    <app-root></app-root>
   </body>
 </html>

@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel src/index.html --port 3000",
-    "build": "parcel build src/index.html --out-dir build --public-url ./"
+    "start": "parcel app/index.html --port 4200",
+    "build": "parcel build app/index.html --out-dir build --public-url ./",
+    "clean": "rm -rf dist .cache"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,10 @@
     "url": "https://github.com/Arish-Shah/ng/issues"
   },
   "homepage": "https://github.com/Arish-Shah/ng#readme",
-  "dependencies": {
-    "angular": "^1.7.9"
-  },
   "devDependencies": {
     "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "angular": "^1.7.9"
   }
 }
