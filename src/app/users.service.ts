@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UsersService {
-  users: User[] = [
+  users = [
     { name: 'Luke Skywalker', userName: 'lukeSky' },
     { name: 'Darth Vader', userName: 'Darthy' },
     { name: 'Han Solo', userName: 'hSolo' }
@@ -20,10 +20,13 @@ export class UsersService {
     const updatedUsers = [...this.users];
     updatedUsers.splice(index, 1);
     this.users = updatedUsers;
+    return this.users;
   }
-}
 
-interface User {
-  name: string;
-  userName: string;
+  addUser(user) {
+    const updatedUsers = [...this.users];
+    updatedUsers.push(user);
+    this.users = updatedUsers;
+    return this.users;
+  }
 }

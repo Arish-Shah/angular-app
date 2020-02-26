@@ -13,12 +13,12 @@ import { UsersService } from '../users.service';
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of users; index as index">
           <td>{{ user.name }}</td>
           <td>{{ user.userName }}</td>
           <td>
-            <button (click)="onEditUser(user.id)">Edit</button>
-            <button (click)="onDeleteUser(user.id)">Delete</button>
+            <button (click)="onEditUser(index)">Edit</button>
+            <button (click)="onDeleteUser(index)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -34,11 +34,9 @@ export class UsersComponent implements OnInit {
     this.users = this.usersService.getUsers();
   }
 
-  onEditUser(id) {
-    console.log(id);
-  }
+  onEditUser(index) {}
 
-  onDeleteUser(id) {
-    console.log(id);
+  onDeleteUser(index) {
+    this.users = this.usersService.deleteUser(index);
   }
 }
