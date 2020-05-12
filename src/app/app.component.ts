@@ -1,28 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AccountsService } from './accounts.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  serverElements = [
-    { type: 'server', name: 'Test server', content: 'Just a server' },
-  ];
+export class AppComponent implements OnInit {
+  accounts: { name: string; status: string }[] = [];
 
-  onServerAdded(serverData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'server',
-      name: serverData.name,
-      content: serverData.content,
-    });
-  }
+  constructor(private accountService: AccountsService) {}
 
-  onBlueprintAdded(blueprintData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'blueprint',
-      name: blueprintData.name,
-      content: blueprintData.content,
-    });
+  ngOnInit() {
+    this.accounts = this.accountService.accounts;
   }
 }
