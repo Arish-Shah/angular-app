@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -6,23 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  serverElements = [
-    { type: 'server', name: 'Test server', content: 'Just a server' },
-  ];
-
-  onServerAdded(serverData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'server',
-      name: serverData.name,
-      content: serverData.content,
-    });
+  suggestUserName() {
+    const suggestedName = 'Superuser';
   }
 
-  onBlueprintAdded(blueprintData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'blueprint',
-      name: blueprintData.name,
-      content: blueprintData.content,
-    });
+  /* Function executes on submitting form */
+  onSubmit(form: NgForm) {
+    console.log(form.value);
   }
 }
