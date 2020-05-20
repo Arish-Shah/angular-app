@@ -1,44 +1,82 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  @ViewChild('f') signUpForm: NgForm;
-  defaultQuestion = 'pet';
-  answer = '';
-  genders = ['Male', 'Female'];
-  user = {
-    username: '',
-    email: '',
-    secretQuestion: '',
-    answer: '',
-    gender: '',
-  };
-  submitted = false;
+export class AppComponent implements OnInit {
+  genders = ['male', 'female'];
+  signupForm: FormGroup;
+  forbiddenUsernames = ['Chris', 'Anna'];
 
-  suggestUserName() {
-    const suggestedName = 'Superuser';
-    this.signUpForm.form.patchValue({
-      userData: { username: suggestedName },
+  ngOnInit() {
+    this.signupForm = new FormGroup({
+      userData: new FormGroup({
+        username: new FormControl(null, [
+          Validators.required,
+          this.forbiddenNames.bind(this),
+        ]),
+        email: new FormControl(
+          null,
+          [Validators.required, Validators.email],
+          this.forbiddenEmails
+        ),
+      }),
+      gender: new FormControl('male'),
+      hobbies: new FormArray([]),
+    });
+
+    this.signupForm.statusChanges.subscribe((value) => console.log(value));
+
+    this.signupForm.setValue({
+      userData: {
+        username: 'Max',
+        email: 'max@test.com',
+      },
+      gender: 'male',
+      hobbies: [],
+    });
+
+    this.signupForm.patchValue({
+      userData: {
+        username: 'Anna',
+      },
     });
   }
 
-  /* Function executes on submitting form */
-  // onSubmit(form: NgForm) {
-  //   console.log(form.value);
-  // }
-
   onSubmit() {
-    this.submitted = true;
-    this.user.username = this.signUpForm.value.userData.username;
-    this.user.email = this.signUpForm.value.userData.email;
-    this.user.secretQuestion = this.signUpForm.value.secret;
-    this.user.answer = this.signUpForm.value.questionAnswer;
-    this.user.gender = this.signUpForm.value.gender;
-    this.signUpForm.reset();
+    console.log(this.signupForm);
+    this.signupForm.reset();
+  }
+
+  onAddHobby() {
+    const control = new FormControl(null, Validators.required);
+    (<FormArray>this.signupForm.get('hobbies')).push(control);
+  }
+
+  forbiddenNames(control: FormControl): { [s: string]: boolean } {
+    if (this.forbiddenUsernames.includes(control.value)) {
+      return {
+        nameIsForbidden: true,
+      };
+    }
+    return null;
+  }
+
+  forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
+    const promise = new Promise((resolve) => {
+      setTimeout(() => {
+        if (control.value === 'test@test.com') {
+          resolve({ emailIsForbidden: true });
+        } else {
+          resolve(null);
+        }
+      }, 1000);
+    });
+
+    return promise;
   }
 }
