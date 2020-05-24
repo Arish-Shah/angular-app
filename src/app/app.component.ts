@@ -1,28 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  serverElements = [
-    { type: 'server', name: 'Test server', content: 'Just a server' },
-  ];
+export class AppComponent implements OnInit {
+  loadedPosts = [];
+  url = 'https://ng-complete-guide-19eb8.firebaseio.com/posts.json';
 
-  onServerAdded(serverData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'server',
-      name: serverData.name,
-      content: serverData.content,
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.onFetchPosts();
+  }
+
+  onCreatePost(postData: { title: string; content: string }) {
+    this.http.post(this.url, postData).subscribe((response) => {
+      console.log(response);
     });
   }
 
-  onBlueprintAdded(blueprintData: { name: string; content: string }) {
-    this.serverElements.push({
-      type: 'blueprint',
-      name: blueprintData.name,
-      content: blueprintData.content,
-    });
+  onFetchPosts() {
+    this.http
+      .get(this.url)
+      .pipe(
+        map((responseData) => {
+          const postArray = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              postArray.push({ ...responseData[key], id: key });
+            }
+          }
+          return postArray;
+        })
+      )
+      .subscribe((response) => {
+        console.log(response);
+      });
+  }
+
+  onClearPosts() {
+    // Send Http request
   }
 }
