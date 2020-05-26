@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Post } from './post.model';
+import { PostsService } from './posts.service';
 
 @Component({
   selector: 'app-root',
@@ -9,40 +9,29 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   loadedPosts = [];
-  url = 'https://ng-complete-guide-19eb8.firebaseio.com/posts.json';
+  isFetching: boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(private postsService: PostsService) {}
 
   ngOnInit() {
     this.onFetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
-    this.http.post(this.url, postData).subscribe((response) => {
-      console.log(response);
-    });
+  onCreatePost(postData: Post) {
+    this.postsService.createAndStorePosts(postData.title, postData.content);
   }
 
   onFetchPosts() {
-    this.http
-      .get(this.url)
-      .pipe(
-        map((responseData) => {
-          const postArray = [];
-          for (const key in responseData) {
-            if (responseData.hasOwnProperty(key)) {
-              postArray.push({ ...responseData[key], id: key });
-            }
-          }
-          return postArray;
-        })
-      )
-      .subscribe((response) => {
-        console.log(response);
-      });
+    this.isFetching = true;
+    this.postsService.fetchPosts().subscribe((posts) => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onClearPosts() {
-    // Send Http request
+    this.postsService.deletePosts().subscribe(() => {
+      this.loadedPosts = [];
+    });
   }
 }
